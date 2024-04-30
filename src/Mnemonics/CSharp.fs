@@ -2,294 +2,140 @@
 
 open Types
 
-let csContext = 
-  new TemplatesExportTemplateContextCSharpContext (
-    context = "TypeMember, TypeAndNamespace",
-    minimumLanguageVersion = 2.0M
-  )
+let csharpStructureContext =
+   TemplatesExportTemplateContextCSharpContext(context = "TypeMember, TypeAndNamespace", minimumLanguageVersion = 2.0M)
+
+let csharpMemberContext =
+   TemplatesExportTemplateContextCSharpContext(context = "TypeMember", minimumLanguageVersion = 2.0M)
 
 let csharpTypes =
-  [
-    ("b", "bool", "false")
-    ("c", "char", "0")
-    ("f", "float", "0.0f")
-    ("by", "byte", "0")
-    ("d", "double", "0.0")
-    ("i", "int", "0")
-    ("m", "decimal", "0M")
-    ("s", "string", "\"\"")
-    ("l", "long", "0")
-    ("u", "uint", "0")
-    ("g", "System.Guid", "System.Guid.NewGuid()")
-    ("t", "System.DateTime", "System.DateTime.UtcNow")
-    ("sb", "System.Text.StringBuilder", "new System.Text.StringBuilder")
-  ]
+   [ ("b", "bool", "default")
+     ("c", "char", "default")
+     ("f", "float", "default")
+     ("by", "byte", "default")
+     ("d", "double", "default")
+     ("i", "int", "default")
+     ("m", "decimal", "default")
+     ("s", "string", "\"\"")
+     ("l", "long", "default")
+     ("u", "uint", "default")
+     ("g", "System.Guid", "System.Guid.NewGuid()")
+     ("t", "System.DateTime", "System.DateTime.UtcNow")
+     ("sb", "System.Text.StringBuilder", "new System.Text.StringBuilder()") ]
 
 let cSharpStructureTemplates =
-  [
-    (
-      "c",
-      [
-        Text "public class "
-        Constant ("CLASSNAME", "MyClass")
-        Scope [
-          endConstant
-        ]
-      ]
-    )
-    (
-      "a",
-      [
-        Text "public abstract class "
-        Constant ("CLASSNAME", "MyClass")
-        Scope [
-          endConstant
-        ]
-      ]
-    )
-    (
-      "C",
-      [
-        Text "public static class "
-        Constant ("CLASSNAME", "MyClass")
-        Scope [
-          endConstant
-        ]
-      ]
-    )
-    (
-      "i",
-      [
-        Text "public interface "
-        Constant ("INTERFACENAME", "IMyInterface")
-        Scope [ endConstant ]
-      ]
-    )
-    (
-      "s",
-      [
-        Text "public struct "
-        Constant ("STRUCTNAME", "MyStruct")
-        Scope [ endConstant ]
-      ]
-    )
-    (
-      "e",
-      [
-        Text "public enum "
-        Constant ("ENUMNAME", "MyEnum")
-        Scope [ endConstant ]
-      ]
-    )
-  ]
+   [ ("c",
+      [ Text "A class" ],
+      [ Text "public class "
+        Constant("CLASSNAME", "MyClass")
+        Scope [ endConstant ] ])
+     ("a",
+      [ Text "An abstract class" ],
+      [ Text "public abstract class "
+        Constant("CLASSNAME", "MyClass")
+        Scope [ endConstant ] ])
+     ("C",
+      [ Text "A static class" ],
+      [ Text "public static class "
+        Constant("CLASSNAME", "MyClass")
+        Scope [ endConstant ] ])
+     ("i",
+      [ Text "An interface" ],
+      [ Text "public interface "
+        Constant("INTERFACENAME", "IMyInterface")
+        Scope [ endConstant ] ])
+     ("s",
+      [ Text "A struct" ],
+      [ Text "public struct "
+        Constant("STRUCTNAME", "MyStruct")
+        Scope [ endConstant ] ])
+     ("e", [ Text "An enum" ], [ Text "public enum "; Constant("ENUMNAME", "MyEnum"); Scope [ endConstant ] ]) ]
 
 let cSharpMemberTemplates =
-  [
-    (
-      "v",
-      [
-        Text "A field of type "
-        FixedType
-      ],
-      [
-        Text "private "
+   [ ("v",
+      [ Text "A field of type "; FixedType ],
+      [ Text "private "
         FixedType
         Text " "
-        Constant ("fieldname", "fieldname")
-        semiColon
-      ]
-    )
-    (
-      "vr",
-      [
-        Text "A readonly field of type "
-        FixedType
-      ],
-      [
-        Text "private readonly "
-        Constant ("type", "type")
+        Constant("fieldname", "fieldname")
+        semiColon ])
+     ("vr",
+      [ Text "A readonly field of type "; FixedType ],
+      [ Text "private readonly "
+        Constant("type", "type")
         Text " "
-        Constant ("fieldname", "fieldname")
-        semiColon
-      ]
-    )
-    (
-      "V",
-      [
-        Text "A static field of type "
-        FixedType
-      ],
-      [
-        Text "private static "
+        Constant("fieldname", "fieldname")
+        semiColon ])
+     ("V",
+      [ Text "A static field of type "; FixedType ],
+      [ Text "private static "
         FixedType
         Text " "
-        Constant ("fieldname", "fieldname")
-        semiColon
-      ]
-    )
-    (
-      "n",
-      [
-        Text "A field of type "
+        Constant("fieldname", "fieldname")
+        semiColon ])
+     ("n",
+      [ Text "A field of type "
         FixedType
-        Text " initialized to the default value."
-      ],
-      [
-        Text "private "
+        Text " initialized to the default value." ],
+      [ Text "private "
         FixedType
         Text " "
-        Constant ("fieldname", "fieldname")
+        Constant("fieldname", "fieldname")
         Text " = "
         DefaultValue
-        semiColon
-      ]
-    )
-    (
-      "o",
-      [
-        Text "A readonly field of type "
+        semiColon ])
+     ("o",
+      [ Text "A readonly field of type "
         FixedType
-        Text " initialized to the default value."
-      ],
-      [
-        Text "private readonly "
+        Text " initialized to the default value." ],
+      [ Text "private readonly "
         FixedType
         Text " "
-        Constant ("fieldname", "fieldname")
+        Constant("fieldname", "fieldname")
         Text " = "
         DefaultValue
-        semiColon
-      ]
-    )
-    (
-      "t",
-      [
-        Text "A test method."
-      ],
-      [
-        Text "[Test] public void "
-        Constant ("methodname", "MyMethod")
-        Text "()"
-        Scope [
-          endConstant
-        ]
-      ]
-    )
-    (
-      "m",
-      [
-        Text "A method that returns a(n) "
-        FixedType
-      ],
-      [
-        Text "public"
+        semiColon ])
+     ("m",
+      [ Text "A method that returns a "; FixedType ],
+      [ Text "public"
         space
         FixedType
         space
-        Constant ("methodname", "MyMethod")
+        Constant("methodname", "MyMethod")
         Text "()"
-        Scope [
-          endConstant
-        ]
-      ]
-    )
-    (
-      "M",
-      [
-        Text "A static method that returns a(n) "
-        FixedType
-      ],
-      [
-        Text "public static "
+        Scope [ endConstant ] ])
+     ("M",
+      [ Text "A static method that returns a "; FixedType ],
+      [ Text "public static "
         FixedType
         space
-        Constant ("methodname", "MyMethod")
+        Constant("methodname", "MyMethod")
         Text "()"
-        Scope [
-          endConstant
-        ]
-      ]
-    )
-    (
-      "p",
-      [
-        Text "An automatic property of type "
-        FixedType
-      ],
-      [
-        Text "public "
+        Scope [ endConstant ] ])
+     ("p",
+      [ Text "An automatic property of type "; FixedType ],
+      [ Text "public "
         FixedType
         space
         Constant("propname", "MyProperty")
         Text "{ get; set; }"
-        endConstant
-      ]
-    )
-    (
-      "pr",
-      [
-        Text "An automatic property of type "
+        endConstant ])
+     ("pr",
+      [ Text "An automatic property of type "
         FixedType
-        Text " with a private setter"
-      ],
-      [
-        Text "public "
+        Text " with a private setter" ],
+      [ Text "public "
         FixedType
         space
         Constant("propname", "MyProperty")
         Text "{ get; private set; }"
-        endConstant
-      ]
-    )
-    (
-      "pg",
-      [
-        Text "An automatic property of type "
+        endConstant ])
+     ("pg",
+      [ Text "An automatic property of type "
         FixedType
-        Text " with an empty getter and no setter"
-      ],
-      [
-        Text "public "
+        Text " with an empty getter and no setter" ],
+      [ Text "public "
         FixedType
         Text " "
         Constant("propname", "MyProperty")
-        Scope [
-          Text "get "
-          Scope [ endConstant ]
-        ]
-      ]
-    )
-//    (
-//      "d",
-//      [
-//        Text "A dependency property of type "
-//        FixedType
-//        Text "."
-//      ],
-//      [
-//        Text "public "
-//        FixedType
-//        Text " "
-//        Constant("propname", "MyProperty")
-//        Scope [
-//          Text "get "
-//          Scope [
-//            Text "return ("
-//            FixedType
-//            Text ")GetValue("
-//            Constant("propname", "MyProperty")
-//            Text "Property);"
-//          ]
-//          Text "set "
-//          Scope [
-//            Text "SetValue("
-//            Constant("propname", "MyProperty")
-//            Text "Property, value);"
-//          ]
-//        ]
-//        Text "public static readonly System.Windows.DependencyProperty "
-//        Constant("propname", "MyProperty")
-//        Text "Property ="
-//      ]
-//    )
-  ]
+        Scope [ Text "get "; Scope [ endConstant ] ] ]) ]
