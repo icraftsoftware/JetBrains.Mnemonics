@@ -45,7 +45,17 @@
       </s:Int64>
    </xsl:template>
 
-   <xsl:template match="Context/CSharpContext[contains(@context, 'TypeAndNamespace')]">
+   <xsl:template match="Context/CSharpContext[@context]">
+      <xsl:param name="uid" select="/.."/>
+      <xsl:apply-templates select="." mode="TAN">
+         <xsl:with-param name="uid" select="$uid"/>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="." mode="TM">
+         <xsl:with-param name="uid" select="$uid"/>
+      </xsl:apply-templates>
+   </xsl:template>
+
+   <xsl:template match="Context/CSharpContext[contains(@context, 'TypeAndNamespace')]" mode="TAN">
       <xsl:param name="uid" select="/.."/>
       <s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=558F05AA0DE96347816FF785232CFB2A/@KeyIndexDefined">True</s:Boolean>
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=558F05AA0DE96347816FF785232CFB2A/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">
@@ -54,7 +64,7 @@
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=558F05AA0DE96347816FF785232CFB2A/Type/@EntryValue">InCSharpTypeAndNamespace</s:String>
    </xsl:template>
 
-   <xsl:template match="Context/CSharpContext[contains(@context, 'TypeMember')]">
+   <xsl:template match="Context/CSharpContext[contains(@context, 'TypeMember')]" mode="TM">
       <xsl:param name="uid" select="/.."/>
       <s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/@KeyIndexDefined">True</s:Boolean>
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">
