@@ -14,15 +14,9 @@
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={@uid}/Description/@EntryValue">
          <xsl:value-of select="@description"/>
       </s:String>
-      <xsl:apply-templates select="Variables/Variable">
-         <xsl:with-param name="uid" select="@uid"/>
-      </xsl:apply-templates>
       <s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={@uid}/Reformat/@EntryValue">
          <xsl:value-of select="@reformat"/>
       </s:Boolean>
-      <xsl:apply-templates select="Context/*">
-         <xsl:with-param name="uid" select="@uid"/>
-      </xsl:apply-templates>
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={@uid}/Shortcut/@EntryValue">
          <xsl:value-of select="@shortcut"/>
       </s:String>
@@ -32,6 +26,12 @@
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={@uid}/Text/@EntryValue">
          <xsl:value-of select="@text"/>
       </s:String>
+      <xsl:apply-templates select="Variables/Variable">
+         <xsl:with-param name="uid" select="@uid"/>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="Context/*">
+         <xsl:with-param name="uid" select="@uid"/>
+      </xsl:apply-templates>
    </xsl:template>
 
    <xsl:template match="Variables/Variable">
@@ -45,14 +45,17 @@
       </s:Int64>
    </xsl:template>
 
-   <xsl:template match="Context/CSharpContext">
+   <xsl:template match="Context/CSharpContext[contains(@context, 'TypeAndNamespace')]">
       <xsl:param name="uid" select="/.."/>
-      <!-- TODO some hardcoded output that does not take into account the actual CSharpContext given as input -->
       <s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=558F05AA0DE96347816FF785232CFB2A/@KeyIndexDefined">True</s:Boolean>
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=558F05AA0DE96347816FF785232CFB2A/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">
          <xsl:value-of select="@minimumLanguageVersion"/>
       </s:String>
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=558F05AA0DE96347816FF785232CFB2A/Type/@EntryValue">InCSharpTypeAndNamespace</s:String>
+   </xsl:template>
+
+   <xsl:template match="Context/CSharpContext[contains(@context, 'TypeMember')]">
+      <xsl:param name="uid" select="/.."/>
       <s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/@KeyIndexDefined">True</s:Boolean>
       <s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/={$uid}/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">
          <xsl:value-of select="@minimumLanguageVersion"/>

@@ -52,28 +52,14 @@ let cSharpStructureTemplates =
      ("e", [ Text "An enum" ], [ Text "public enum "; Constant("ENUMNAME", "MyEnum"); Scope [ endConstant ] ]) ]
 
 let cSharpMemberTemplates =
-   [ ("v",
+   [ ("f",
       [ Text "A field of type "; FixedType ],
       [ Text "private "
         FixedType
         Text " "
         Constant("fieldname", "fieldname")
         semiColon ])
-     ("vr",
-      [ Text "A readonly field of type "; FixedType ],
-      [ Text "private readonly "
-        Constant("type", "type")
-        Text " "
-        Constant("fieldname", "fieldname")
-        semiColon ])
-     ("V",
-      [ Text "A static field of type "; FixedType ],
-      [ Text "private static "
-        FixedType
-        Text " "
-        Constant("fieldname", "fieldname")
-        semiColon ])
-     ("n",
+     ("fn",
       [ Text "A field of type "
         FixedType
         Text " initialized to the default value." ],
@@ -84,7 +70,14 @@ let cSharpMemberTemplates =
         Text " = "
         DefaultValue
         semiColon ])
-     ("o",
+     ("fr",
+      [ Text "A readonly field of type "; FixedType ],
+      [ Text "private readonly "
+        Constant("type", "type")
+        Text " "
+        Constant("fieldname", "fieldname")
+        semiColon ])
+     ("frn",
       [ Text "A readonly field of type "
         FixedType
         Text " initialized to the default value." ],
@@ -94,6 +87,13 @@ let cSharpMemberTemplates =
         Constant("fieldname", "fieldname")
         Text " = "
         DefaultValue
+        semiColon ])
+     ("F",
+      [ Text "A static field of type "; FixedType ],
+      [ Text "private static "
+        FixedType
+        Text " "
+        Constant("fieldname", "fieldname")
         semiColon ])
      ("m",
       [ Text "A method that returns a "; FixedType ],
